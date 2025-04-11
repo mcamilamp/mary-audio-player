@@ -8,8 +8,11 @@ const AudioPlayer = () => {
         <img className="img" src="./img/1.png" alt="" />
       </div>
       <h3 className="title">Sudden Shower - Lovely Runner</h3>
+      <input className="progress-bar" type="range" min={0} max={100} />
       <div className="buttons">
         <svg
+          className="arrow-after
+        "
           xmlns="http://www.w3.org/2000/svg"
           width="55"
           height="33"
@@ -24,6 +27,7 @@ const AudioPlayer = () => {
           />
         </svg>
         <svg
+          className="pause"
           xmlns="http://www.w3.org/2000/svg"
           width="104"
           height="101"
@@ -45,6 +49,7 @@ const AudioPlayer = () => {
           </defs>
         </svg>
         <svg
+          className="arrow-next"
           xmlns="http://www.w3.org/2000/svg"
           width="54"
           height="32"
