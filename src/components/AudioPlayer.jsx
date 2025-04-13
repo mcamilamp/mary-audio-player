@@ -72,6 +72,7 @@ const AudioPlayer = ({ songs }) => {
 
   // function to format the current time and duration to mm:ss
   function formatDuration(durationSeconsds) {
+    if (isNaN(durationSeconsds)) return "00:00";
     const minutes = Math.floor(durationSeconsds / 60);
     const seconds = Math.floor(durationSeconsds % 60);
     const formattedSeconds = seconds.toString().padStart(2, "0");
@@ -84,10 +85,16 @@ const AudioPlayer = ({ songs }) => {
     const audioEl = audioRef.current;
     if (!audioEl) return;
 
+    const handleLoadedMetadata = () => {
+      setDuration(audioEl.duration);
+    };
+
+    audioEl.addEventListener("loadedmetadata", handleLoadedMetadata);
     audioEl.addEventListener("timeupdate", handleTimeUpdate);
 
     return () => {
       if (audioEl) {
+        audioEl.removeEventListener("loadedmetadata", handleLoadedMetadata);
         audioEl.removeEventListener("timeupdate", handleTimeUpdate);
       }
     };
@@ -108,9 +115,11 @@ const AudioPlayer = ({ songs }) => {
   return (
     <div className="main-container">
       <div className="img">
-        <img className="img" src="./img/1.png" alt="" />
+        <img className="img" src={currentSong.imgSrc} alt="" />
       </div>
-      <h3 className="title">Sudden Shower - Lovely Runner</h3>
+      <h3 className="title">
+        {currentSong.title} - {currentSong.artist}
+      </h3>
       <div className="player-card">
         <input
           className="progress-bar"

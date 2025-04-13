@@ -13,20 +13,23 @@ function App() {
     {
       title: "The Way I Loved You",
       artist: "Taylor Swift",
-      audioSrc: "./audio/The Way I Loved You - Taylor Swift.mp3",
+      audioSrc:
+        "./audio/Taylor Swift - The Way I Loved You (Taylor's Version) (Lyric Video).mp3",
       imgSrc: "./img/2.png",
     },
     {
       title: "Forever Star",
       artist: "OST Hidden Love",
-      audioSrc: "./audio/Forever Star - OST Hidden Love.mp3",
+      audioSrc:
+        "./audio/Forever Star偷偷藏不住電視劇插曲 -  張洢豪Wherever you goIll surround you still動態歌詞.mp3",
       imgSrc: "./img/3.png",
     },
-    {},
+
     {
       title: "Can I Have This Dance",
       artist: "High School Musical 3",
-      audioSrc: "./audio/Can I Have This Dance - High School Musical 3.mp3",
+      audioSrc:
+        "./audio/Can I Have This Dance (From High School Musical 3_ Senior Year).mp3",
       imgSrc: "./img/4.png",
     },
   ];
