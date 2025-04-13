@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./AudioPlayer.css";
 
-const AudioPlayer = ({ audioSrc }) => {
+const AudioPlayer = ({ songs }) => {
   // state variables to manage the player´s status and current time
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
 
   const audioRef = useRef(null);
 
@@ -21,25 +22,52 @@ const AudioPlayer = ({ audioSrc }) => {
     setDuration(audioRef.current.duration);
   };
 
-  // function to handle playing the audio
-  const handlePlay = () => {
-    audioRef.current.play();
-    setIsPlaying(true);
-  };
-
-  // function to handle pausing the audio
-  const handlePause = () => {
-    audioRef.current.pause();
-    setIsPlaying(false);
-  };
-
-  // function to toggle between play and pause state
   const handlePlayPause = () => {
     if (isPlaying) {
-      handlePause();
+      audioRef.current.pause();
+      setIsPlaying(false);
     } else {
-      handlePlay();
+      audioRef.current.play();
+      setIsPlaying(true);
     }
+  };
+  // // function to handle playing the audio
+  // const handlePlay = () => {
+  //   audioRef.current.play();
+  //   setIsPlaying(true);
+  // };
+
+  // // function to handle pausing the audio
+  // const handlePause = () => {
+  //   audioRef.current.pause();
+  //   setIsPlaying(false);
+  // };
+
+  // function to toggle between play and pause state
+  // const handlePlayPause = () => {
+  //   if (isPlaying) {
+  //     handlePause();
+  //   } else {
+  //     handlePlay();
+  //   }
+  // };
+
+  // function to handle the next song
+  const handleNext = () => {
+    const nextIndex = (currentSongIndex + 1) % songs.length;
+    setCurrentSongIndex(nextIndex);
+    setIsPlaying(false);
+    audioRef.current.pause();
+    audioRef.current.load();
+  };
+
+  // function to handle the previous song
+  const handlePrevious = () => {
+    const prevIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+    setCurrentSongIndex(prevIndex);
+    setIsPlaying(false);
+    audioRef.current.pause();
+    audioRef.current.load();
   };
 
   // function to format the current time and duration to mm:ss
@@ -51,14 +79,32 @@ const AudioPlayer = ({ audioSrc }) => {
   }
 
   // useEffect to update the current time and duration when the audio is loaded
-  useEffect(() => {
-    audioRef.current.addEventListener("timeupdate", handleTimeUpdate);
 
-    // clean up function to remove the event listener
+  useEffect(() => {
+    const audioEl = audioRef.current;
+    if (!audioEl) return;
+
+    audioEl.addEventListener("timeupdate", handleTimeUpdate);
+
     return () => {
-      audioRef.current.removeEventListener("timeupdate", handleTimeUpdate);
+      if (audioEl) {
+        audioEl.removeEventListener("timeupdate", handleTimeUpdate);
+      }
     };
   }, []);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.load();
+
+      if (isPlaying) {
+        audioRef.current.play();
+      }
+    }
+  }, [currentSongIndex]);
+
+  const currentSong = songs[currentSongIndex];
+
   return (
     <div className="main-container">
       <div className="img">
@@ -75,7 +121,7 @@ const AudioPlayer = ({ audioSrc }) => {
           onChange={handleSeek}
         />
         {/* The audio element */}
-        <audio ref={audioRef} src={audioSrc} />
+        <audio ref={audioRef} src={currentSong.audioSrc} />
 
         {/* Display current and total duration of the track */}
         <div className="track-duration">
@@ -85,7 +131,7 @@ const AudioPlayer = ({ audioSrc }) => {
       </div>
 
       <div className="buttons">
-        <button>
+        <button className="prev-button" onClick={handlePrevious}>
           <svg
             className="arrow-after
         "
@@ -142,9 +188,9 @@ const AudioPlayer = ({ audioSrc }) => {
           )}
         </button>
 
-        <button>
+        <button className="next-button" onClick={handleNext}>
           <svg
-            className="arrow-next"
+            // className="arrow-next"
             xmlns="http://www.w3.org/2000/svg"
             width="54"
             height="32"
