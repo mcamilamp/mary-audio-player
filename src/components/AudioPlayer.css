@@ -52,7 +52,8 @@ button {
   background: none;
 }
 
-.arrow-after && .arrow-next {
+.arrow-after,
+.arrow-next {
   cursor: pointer;
 }
 
